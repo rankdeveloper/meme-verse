@@ -262,7 +262,7 @@ const UploadPage = () => {
               onClick={handleUpload}
               disabled={!file || uploading}
             >
-              {uploading ? "🚀 Uploading..." : "Publish Meme"}
+              {uploading ? " Uploading..." : "Publish Meme"}
             </button>
           </div>
         </div>
@@ -282,7 +282,7 @@ const UploadPage = () => {
                 Your Masterpiece!
               </h2>
               <img
-                src={preview}
+                src={preview || ""}
                 alt="Meme Preview"
                 className="w-96 h-96 object-contain rounded-xl bg-[#1c1f26] p-4 border-2 border-purple-500/30 shadow-lg"
               />
@@ -296,7 +296,7 @@ const UploadPage = () => {
               </div>
               <button
                 onClick={() => setPreviewmeme(false)}
-                className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl font-bold transition-colors"
+                className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-purple-700 text-white rounded-xl font-bold transition-colors"
               >
                 Close Preview
               </button>

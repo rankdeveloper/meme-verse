@@ -1,6 +1,6 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Meme, MemeCategory, SortOption } from '../types';
-import * as api from '../services/api';
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { Meme, MemeCategory, SortOption } from "../types";
+import * as api from "../services/api";
 
 interface MemeState {
   memes: Meme[];
@@ -22,49 +22,46 @@ const initialState: MemeState = {
   error: null,
   hasMore: true,
   page: 1,
-  category: 'All',
-  sortBy: 'likes',
-  searchQuery: '',
+  category: "All",
+  sortBy: "likes",
+  searchQuery: "",
   searchResults: [],
 };
 
-// Fetch memes
 export const fetchMemes = createAsyncThunk(
-  'memes/fetchMemes',
+  "memes/fetchMemes",
   async (_, { getState, rejectWithValue }) => {
     try {
       const state = getState() as { memes: MemeState };
       const { page, category, sortBy } = state.memes;
-      
+
       const response = await api.getMemes(category, page, 10, sortBy);
-      const hasMore = response.memes.length > 0; 
+      const hasMore = response.memes.length > 0;
 
       return { memes: response.memes, hasMore };
     } catch (error) {
-      return rejectWithValue('Failed to fetch memes');
+      return rejectWithValue("Failed to fetch memes");
     }
   }
 );
 
-// Fetch meme by ID
 export const fetchMemeById = createAsyncThunk(
-  'memes/fetchMemeById',
+  "memes/fetchMemeById",
   async (id: string, { rejectWithValue }) => {
     try {
       const meme = await api.getMemeById(id);
       if (!meme) {
-        return rejectWithValue('Meme not found');
+        return rejectWithValue("Meme not found");
       }
       return meme;
     } catch (error) {
-      return rejectWithValue('Failed to fetch meme');
+      return rejectWithValue("Failed to fetch meme");
     }
   }
 );
 
-// Search memes
 export const searchMemes = createAsyncThunk(
-  'memes/searchMemes',
+  "memes/searchMemes",
   async (query: string, { rejectWithValue }) => {
     try {
       if (!query.trim()) {
@@ -73,66 +70,67 @@ export const searchMemes = createAsyncThunk(
       const results = await api.searchMemes(query);
       return results;
     } catch (error) {
-      return rejectWithValue('Search failed');
+      return rejectWithValue("Search failed");
     }
   }
 );
 
-// Add new meme
 export const addNewMeme = createAsyncThunk(
-  'memes/addNewMeme',
-  async (meme: Omit<Meme, 'id' | 'created_at' | 'likes' | 'comments'>, { rejectWithValue }) => {
+  "memes/addNewMeme",
+  async (
+    meme: Omit<Meme, "id" | "created_at" | "likes" | "comments">,
+    { rejectWithValue }
+  ) => {
     try {
       const newMeme = await api.addMeme(meme);
       return newMeme;
     } catch (error) {
-      return rejectWithValue('Failed to add meme');
+      return rejectWithValue("Failed to add meme");
     }
   }
 );
 
-// Like meme
 export const likeMeme = createAsyncThunk(
-  'memes/likeMeme',
+  "memes/likeMeme",
   async (id: string, { rejectWithValue }) => {
     try {
       const updatedMeme = await api.likeMeme(id);
       return updatedMeme;
     } catch (error) {
-      return rejectWithValue('Failed to like meme');
+      return rejectWithValue("Failed to like meme");
     }
   }
 );
 
-// Unlike meme
 export const unlikeMeme = createAsyncThunk(
-  'memes/unlikeMeme',
+  "memes/unlikeMeme",
   async (id: string, { rejectWithValue }) => {
     try {
       const updatedMeme = await api.unlikeMeme(id);
       return updatedMeme;
     } catch (error) {
-      return rejectWithValue('Failed to unlike meme');
+      return rejectWithValue("Failed to unlike meme");
     }
   }
 );
 
-// memeSlice.ts
 export const addComment = createAsyncThunk(
-  'memes/addComment',
-  async ({ memeId, text }: { memeId: string; text: string }, { rejectWithValue }) => {
+  "memes/addComment",
+  async (
+    { memeId, text }: { memeId: string; text: string },
+    { rejectWithValue }
+  ) => {
     try {
       const newComment = await api.addComment(memeId, text);
       return { memeId, comment: newComment };
     } catch (error) {
-      return rejectWithValue('Failed to add comment');
+      return rejectWithValue("Failed to add comment");
     }
   }
 );
 
-
 const memeSlice = createSlice({
-  name: 'memes',
+  name: "memes",
   initialState,
   reducers: {
     resetMemes: (state) => {
@@ -159,7 +157,7 @@ const memeSlice = createSlice({
       state.hasMore = action.payload;
     },
     clearSearch: (state) => {
-      state.searchQuery = '';
+      state.searchQuery = "";
       state.searchResults = [];
     },
     incrementPage: (state) => {
@@ -212,7 +210,9 @@ const memeSlice = createSlice({
         state.memes.unshift(action.payload);
       })
       .addCase(likeMeme.fulfilled, (state, action) => {
-        const index = state.memes.findIndex(meme => meme.id === action.payload.id);
+        const index = state.memes.findIndex(
+          (meme) => meme.id === action.payload.id
+        );
         if (index !== -1) {
           state.memes[index] = action.payload;
         }
@@ -221,7 +221,9 @@ const memeSlice = createSlice({
         }
       })
       .addCase(unlikeMeme.fulfilled, (state, action) => {
-        const index = state.memes.findIndex(meme => meme.id === action.payload.id);
+        const index = state.memes.findIndex(
+          (meme) => meme.id === action.payload.id
+        );
         if (index !== -1) {
           state.memes[index] = action.payload;
         }
@@ -230,20 +232,20 @@ const memeSlice = createSlice({
         }
       })
       // memeSlice.ts
-.addCase(addComment.fulfilled, (state, action) => {
-  const { memeId, comment } = action.payload;
+      .addCase(addComment.fulfilled, (state, action) => {
+        const { memeId, comment } = action.payload;
 
-  // Update currentMeme if it matches the memeId
-  if (state.currentMeme?.id === memeId) {
-    state.currentMeme.comments.push(comment);
-  }
+        // Update currentMeme if it matches the memeId
+        if (state.currentMeme?.id === memeId) {
+          state.currentMeme.comments.push(comment);
+        }
 
-  // Update the memes array if it contains the meme
-  const memeIndex = state.memes.findIndex(meme => meme.id === memeId);
-  if (memeIndex !== -1) {
-    state.memes[memeIndex].comments.push(comment);
-  }
-})
+        // Update the memes array if it contains the meme
+        const memeIndex = state.memes.findIndex((meme) => meme.id === memeId);
+        if (memeIndex !== -1) {
+          state.memes[memeIndex].comments.push(comment);
+        }
+      })
       .addCase(addComment.rejected, (state, action) => {
         state.error = action.payload as string;
       });

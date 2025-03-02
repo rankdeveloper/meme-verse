@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Github, Twitter, Instagram } from "lucide-react";
 import { useAppSelector } from "../../hooks/useRedux";
-import { ArrowRight } from "lucide-react";
 
 const Footer: React.FC = () => {
   const { darkMode } = useAppSelector((state) => state.ui);
@@ -10,7 +9,9 @@ const Footer: React.FC = () => {
   return (
     <footer
       className={`py-8 ${
-        darkMode ? "bg-[#0e1217] text-white" : "bg-gray-100 text-gray-800"
+        darkMode
+          ? "bg-[#0e1217] border-t border-gray-700 text-white"
+          : "bg-gray-100 text-gray-800 border-t border-purple-700"
       } transition-colors duration-300`}
     >
       <div className="container mx-auto px-4">
@@ -74,7 +75,11 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700 text-center">
+        <div
+          className={`mt-8 pt-8 border-t  ${
+            darkMode ? "dark:border-gray-700" : "border-gray-200"
+          }  text-center`}
+        >
           <p>
             &copy; {new Date().getFullYear()} memeVerse. All rights reserved.
           </p>

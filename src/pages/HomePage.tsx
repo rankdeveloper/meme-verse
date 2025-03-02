@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles, Zap, TrendingUp } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../hooks/useRedux";
 import { fetchMemes } from "../store/memeSlice";
 import { whychooseusData } from "../utils/rowData";
 import "../style.css";
+import WhyChooseUsCard from "../components/ui/whychoose-us-card";
+import { heroVariants, imgVariants, itemVariants } from "../utils/variants";
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,44 +30,13 @@ const HomePage: React.FC = () => {
   };
   useEffect(() => {
     fetchMeme();
-
     const interval = setInterval(fetchMeme, 5000);
-
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     dispatch(fetchMemes());
   }, [dispatch]);
-
-  const heroVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
-
-  const imgVariants = {
-    initial: {
-      opacity: 1,
-      scale: 1,
-      rotate: 0,
-    },
-    animate: {
-      opacity: 1,
-      scale: [1, 1.05, 1],
-      // x: [100, 120, 100],
-      rotate: [-10, 5, 0],
-    },
-  };
 
   return (
     <div className="min-h-screen scrollbar-hidden">
@@ -90,7 +61,9 @@ const HomePage: React.FC = () => {
                 <span className="text-[#ffff00]">Verse</span>
               </motion.h1>
               <motion.p
-                className="text-lg md:text-xl mb-8 text-black dark:text-gray-300 mt-auto md:mt-4"
+                className={`text-lg md:text-xl mb-8  ${
+                  darkMode ? "text-gray-300" : "text-gray-500"
+                }  mt-auto md:mt-4`}
                 variants={itemVariants}
               >
                 Create, share, and laugh with our easy-to-use meme generator.
@@ -185,46 +158,7 @@ const HomePage: React.FC = () => {
         </div>
       </motion.section>
 
-      <section
-        className={`border-t md:border-t-[#3b4458]  py-16 ${
-          darkMode ? "bg-[#0e1217]" : "bg-white border-t md:border-t-purple-500"
-        }`}
-      >
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
-            Why Choose meme<span className="text-[#ffff00]">Verse</span>
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {whychooseusData.map((item) => (
-              <motion.div
-                key={item.id}
-                className={`p-6 rounded-xl shadow-lg ${
-                  darkMode ? "bg-[#1c1f26]" : "bg-white"
-                } bg-gradient-to-r from-purple-500 to-pink-500 border border-purple-500 p-4`}
-                whileHover={{ y: -10 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <div className="bg-purple-100 dark:bg-purple-900/30 w-14 h-14 rounded-full flex items-center justify-center mb-4">
-                  {item.iconName === "Sparkles" && (
-                    <Sparkles size={24} className="text-white" />
-                  )}
-                  {item.iconName === "Zap" && (
-                    <Zap size={24} className="text-white" />
-                  )}
-                  {item.iconName === "TrendingUp" && (
-                    <TrendingUp size={24} className="text-white" />
-                  )}
-                </div>
-                <h3 className="text-xl font-semibold mb-3">{item.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  {item.description}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <WhyChooseUsCard whychooseusData={whychooseusData} darkMode={darkMode} />
 
       <section className="py-16 bg-gradient-to-r from-purple-500 to-pink-500 text-white">
         <div className="container mx-auto px-4 text-center">

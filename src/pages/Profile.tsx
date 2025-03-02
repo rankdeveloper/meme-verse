@@ -161,7 +161,7 @@ const ProfilePage = () => {
               </div>
               <button
                 type="submit"
-                className="w-full px-6 py-3 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+                className="w-full px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
               >
                 Save Profile
               </button>
@@ -197,7 +197,6 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* Tabs for Uploaded and Liked Memes */}
             <div
               className={`flex space-x-4 border-b border-gray-200 ${
                 darkMode ? "border-gray-700" : "border-purple-600"

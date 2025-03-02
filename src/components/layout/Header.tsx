@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Moon, Sun, Menu, X, Search } from "lucide-react";
+import { Moon, Sun, Menu, X, Search, CircleUser } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux";
 import { toggleDarkMode } from "../../store/uiSlice";
 import { setSearchQuery, searchMemes } from "../../store/memeSlice";
@@ -33,8 +33,8 @@ const Header: React.FC = () => {
     { name: "Home", path: "/" },
     { name: "Explore", path: "/explore" },
     { name: "Upload", path: "/upload" },
-    { name: "Profile", path: "/profile" },
     { name: "Leaderboard", path: "/leaderboard" },
+    // { name: "Profile", path: "/profile" },
   ];
 
   return (
@@ -96,6 +96,15 @@ const Header: React.FC = () => {
                   {link.name}
                 </Link>
               ))}
+
+            <Link
+              to={"/profile"}
+              className={`font-medium hover:text-purple-500 transition-colors ${
+                location.pathname === "/profile" ? "text-purple-500" : ""
+              }`}
+            >
+              <CircleUser />
+            </Link>
             <button
               onClick={() => dispatch(toggleDarkMode())}
               className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
@@ -161,7 +170,9 @@ const Header: React.FC = () => {
                 <span>Dark Mode</span>
                 <button
                   onClick={() => dispatch(toggleDarkMode())}
-                  className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  className={`p-2 rounded-full  ${
+                    darkMode ? "hover:bg-gray-700" : "hover:!bg-purple-500"
+                  }  transition-colors`}
                   aria-label="Toggle dark mode"
                 >
                   {darkMode ? <Sun size={20} /> : <Moon size={20} />}
